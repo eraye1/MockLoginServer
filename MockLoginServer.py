@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from functools import wraps
+import hashlib
 
 app = Flask(__name__)
 
@@ -41,18 +42,35 @@ def api_users(userid):
     else:
         return not_found()
 
-@app.route('/secrets')
+@app.route('/basicAuth')
 @requires_auth
 def api_hello():
     return "Shhh this is top secret spy stuff!"
 
+@app.route('/login')
+@requires_auth
+def api_login():
+    username = request.authorization.username
+    password = request.authorization.password
+
+    hashUsernameAndPassword = hashlib.sha224(username + password).hexdigest()
+
+    message = {
+        'status' : 200,
+        'session' : hashUsernameAndPassword
+    }
+
+    resp = jsonify(message)
+    resp.status_code = 200
+
+    return resp
 
 # Error Messages
 @app.errorhandler(404)
 def not_found(error=None):
     message = {
-            'status': 404,
-            'message': 'Not Found: ' + request.url,
+        'status': 404,
+        'message': 'Not Found: ' + request.url,
     }
     resp = jsonify(message)
     resp.status_code = 404
