@@ -1,7 +1,9 @@
 # MockLoginServer
 
-A super-light mock server to deal with login information sent to the server.
+A super-light mock server to develop with login information sent to the server.
 
-**hashes first 1024 bytes sent to server and returns it as a sessionId.**
+Built with Flask!
 
-Still needs some work around simulating sign-in failures.
+**Currently supports Testing Basic Auth with username=admin and password=secret**
+
+Still needs some work with logging.
